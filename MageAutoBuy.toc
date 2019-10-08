@@ -1,0 +1,11 @@
+## Interface: 11302
+
+## Title: MageAutoBuy
+
+## Notes: Autobuy reagents
+
+## Version: 1.0
+## Author: Goffauxs
+## SavedVariables: desiredReagents
+
+MageAutoBuy.lua
