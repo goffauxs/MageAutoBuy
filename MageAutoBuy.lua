@@ -3,7 +3,7 @@ if desiredReagents == nil then
 end
 
 local reagentIds = {17020, 17031, 17032}
-local numReagents = {};
+local numReagents = {}
 local merchantIdx = {}
 local class = {UnitClass("player")}
 
@@ -25,26 +25,23 @@ mabFrame:SetScript("OnEvent", function(self, event, ...)
 	end
 end)
 
-function mab_GetItemName(var)
-	item =  {GetItemInfo( var )};
-	return item[1];
-end
-
 function mab_GetCurrentReagents()
-	for i=1, #reagentIds, 1 do
+	for i=1, #reagentIds do
 		numReagents[i] = 0
+		local reagentName = GetItemInfo( reagentIds[i] )
 
-		for bag = 4, 0, -1 do
+		for bag = 0, 4 do
 			local size = C_Container.GetContainerNumSlots(bag);
 
 			if size > 0 then
-				for slot = 1, size, 1 do
-					if C_Container.GetContainerItemLink(bag, slot) then
-						local itemName = mab_GetItemName( C_Container.GetContainerItemLink(bag, slot) )
-						local reagentName = mab_GetItemName( reagentIds[i] )
-						local _,itemCount = C_Container.GetContainerItemInfo(bag, slot)
+				for slot = 1, size do
+					local itemLink = C_Container.GetContainerItemLink(bag, slot)
+					if itemLink then
+						local itemName = GetItemInfo( itemLink )
+						local containerInfo = C_Container.GetContainerItemInfo(bag, slot)
+						local itemCount = containerInfo["stackCount"]
 
-						if itemName == reagentName then
+						if (itemName == reagentName) then
 							numReagents[i] = numReagents[i] + itemCount
 						end
 					end
@@ -58,11 +55,11 @@ function mab_MerchantReagents()
 	local boolReagents = {false, false, false}
 
 	for i=1, #reagentIds do
+		local reagentName = GetItemInfo(reagentIds[i])
 		for j = 0, GetMerchantNumItems() do
 			local itemName = GetMerchantItemInfo(j)
-			local reagentName = mab_GetItemName(reagentIds[i])
 
-			if itemName == reagentName then
+			if (itemName == reagentName) then
 				boolReagents[i] = true
 				merchantIdx[i] = j
 			end
@@ -76,7 +73,6 @@ function mab_BuyReagents()
 	for i=1, #reagentIds do
 		if (numReagents[i] < desiredReagents[i]) then
 			local numBuy = desiredReagents[i] - numReagents[i]
-
 			BuyMerchantItem( merchantIdx[i], numBuy );
 		end
 	end
