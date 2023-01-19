@@ -35,14 +35,14 @@ function mab_GetCurrentReagents()
 		numReagents[i] = 0
 
 		for bag = 4, 0, -1 do
-			local size = GetContainerNumSlots(bag);
+			local size = C_Container.GetContainerNumSlots(bag);
 
 			if size > 0 then
 				for slot = 1, size, 1 do
-					if GetContainerItemLink(bag, slot) then
-						local itemName = mab_GetItemName( GetContainerItemLink(bag, slot) )
+					if C_Container.GetContainerItemLink(bag, slot) then
+						local itemName = mab_GetItemName( C_Container.GetContainerItemLink(bag, slot) )
 						local reagentName = mab_GetItemName( reagentIds[i] )
-						local _,itemCount = GetContainerItemInfo(bag, slot)
+						local _,itemCount = C_Container.GetContainerItemInfo(bag, slot)
 
 						if itemName == reagentName then
 							numReagents[i] = numReagents[i] + itemCount
